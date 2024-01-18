@@ -1,6 +1,7 @@
 nba stats
 
-Used apis:
+# Used apis:
 
-https://betsapi.com/docs/bet365/
-https://www.balldontlie.io/home.html#get-all-players
+### https://betsapi.com/docs/bet365/
+
+### https://www.balldontlie.io/home.html#get-all-players
