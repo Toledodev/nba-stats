@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import { getPlayers } from "./services/api";
 
-function App() {
+const App = () => {
+  const [playerNames, setPlayerNames] = useState(""); // String to store player names
+  const [playerIds, setPlayerIds] = useState<any>([]); // Array to store player IDs
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      const names = playerNames.split(",").map((name) => name.trim()); // Split names by comma and trim whitespace
+      const ids = [];
+      for (const name of names) {
+        const playerData = await getPlayers(name);
+        console.log(playerData);
+        if (playerData.length > 0) {
+          console.log(playerData[0].id);
+          ids.push(playerData[0].id); // Assuming the first result is the desired player
+        }
+      }
+      console.log(ids);
+
+      setPlayerIds(ids);
+    };
+
+    if (playerNames) {
+      fetchPlayers();
+    }
+  }, [playerNames]);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>NBA Players</h1>
+        <input
+          type="text"
+          value={playerNames}
+          onChange={(event) => setPlayerNames(event.target.value)}
+          placeholder="Enter player names separated by commas"
+        />
+        <button onClick={() => setPlayerNames("")}>Clear</button>
+        <div>Player IDs: {playerIds.join(", ")}</div>
       </header>
     </div>
   );
-}
+};
 
 export default App;
